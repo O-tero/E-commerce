@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Product
 from category.models import Category
+from carts.models import CartItem
+from carts.views import cart_id
 
 
 # Create your views here.
@@ -27,6 +29,7 @@ def product_detail(request, category_slug, product_slug):
         single_product = Product.objects.get(
             category__slug=category_slug, slug=product_slug
         )
+        in_cart = CartItem.objects.filter(cart__cart_id=cart_id(request), product=single_product).exists()
     except Product.DoesNotExist:
         # Updated the exception to Product.DoesNotExist
         raise get_object_or_404(
@@ -35,5 +38,6 @@ def product_detail(request, category_slug, product_slug):
 
     context = {
         "single_product": single_product,
+        "in_cart": in_cart,
     }
     return render(request, "store/product_detail.html", context)
