@@ -36,13 +36,13 @@ def register(request):
             user.save()
 
             # USER ACTIVATION
-            current_site = get_current - site(request)
+            current_site = get_current_site(request)
             mail_subject = "Please activate your account"
             message = render_to_string(
                 "accounts/account_verification_email.html",
                 {
                     "user": user,
-                    "domain": current_size,
+                    "domain": current_site,
                     "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                     "token": default_token_generator.make_token(user),
                 },
@@ -51,8 +51,7 @@ def register(request):
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
             messages.success(request, "Registration successful.")
-            return redirect("register")
-
+            return redirect('/accounts/login/?command=verification&email='+email)
     else:
         form = RegistrationForm()
     context = {
@@ -82,3 +81,21 @@ def logout(request):
     auth.logout(request)
     messages.success(request, "You are logged out.")
     return redirect("login")
+
+
+def activate(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = Account._default_manager.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, Account.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        messages.success(request, 'Congratulations! Your account is activated.')
+        return redirect('login')
+    else:
+        messages.error(request, 'Invalid activation link')
+        return redirect('register')
+
