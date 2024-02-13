@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
-from .models import Product
+from .models import Product, ReviewRating
 from category.models import Category
 from carts.models import CartItem
 from carts.views import cart_id
@@ -42,7 +42,7 @@ def product_detail(request, category_slug, product_slug):
             category__slug=category_slug, slug=product_slug
         )
         in_cart = CartItem.objects.filter(
-            cart__cart_id=_cart_id(request), product=single_product
+            cart__cart_id=cart_id(request), product=single_product
         ).exists()
     except Exception as e:
         raise e
