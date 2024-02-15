@@ -8,6 +8,7 @@ django = "*"
 pillow = "*"
 mysqlclient = "*"
 requests = "*"
+django-admin-thumbnails = "*"
 
 [dev-packages]
 
