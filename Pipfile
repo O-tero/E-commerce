@@ -9,6 +9,8 @@ pillow = "*"
 mysqlclient = "*"
 requests = "*"
 django-admin-thumbnails = "*"
+python-decouple = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
