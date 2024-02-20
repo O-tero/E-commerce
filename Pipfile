@@ -11,6 +11,7 @@ requests = "*"
 django-admin-thumbnails = "*"
 python-decouple = "*"
 psycopg2-binary = "*"
+django-session-timeout = "*"
 django-admin-honeypot = "*"
 
 [dev-packages]

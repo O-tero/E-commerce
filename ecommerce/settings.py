@@ -17,10 +17,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY")
 
@@ -44,7 +40,7 @@ INSTALLED_APPS = [
     "store",
     "carts",
     "orders",
-    "admin-honeypot",
+    "admin_honeypot",
 ]
 
 MIDDLEWARE = [
@@ -57,6 +53,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+
+SESSION_EXPIRE_SECONDS = 3600  # 1 hour
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+SESSION_TIMEOUT_REDIRECT = "accounts/login"
 ROOT_URLCONF = "ecommerce.urls"
 
 TEMPLATES = [
