@@ -97,7 +97,7 @@ def submit_review(request, product_id):
             review = ReviewRating.objects.get(
                 user__id=request.user.id, product__id=product_id
             )
-            form = ReviewForm(request.POST, instance=reviews)
+            form = ReviewForm(request.POST, instance=review)
             form.save()
             messages.success(request, "Thank you! Your review has been updated.")
             return redirect(url)
