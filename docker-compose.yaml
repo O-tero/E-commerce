@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}          # Use the database name from .env
+      MYSQL_USER: ${MYSQL_USER}                  # Use the MySQL user from .env
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}          # Use the MySQL user password from .env
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # Use the root password from .env
+    volumes:
+      - mysql_data:/var/lib/mysql                 # Persist MySQL data
+    ports:
+      - "3307:3306"               # Expose MySQL on port specified in .env"
+    networks:
+      - mynetwork                                  # Connect to custom network
+
+  web:
+    build: .                                     # Build from Dockerfile in current directory
+    command: python manage.py runserver 0.0.0.0:8000 # Start Django server
+    volumes:
+      - .:/app                                   # Mount current directory to /app in container
+    ports:
+      - "8000:8000"                              # Expose Django on port 8000
+    depends_on:
+      - db                                       # Ensure db service starts before web
+    environment:
+      DB_NAME: ${DB_NAME}                        # Set database name from .env
+      DB_USER: ${DB_USER}                        # Set database user from .env
+      DB_PASSWORD: ${DB_PASSWORD}                # Set user password from .env
+      DB_HOST: ${DB_HOST}                        # Set host from .env
+      DB_PORT: ${DB_PORT}                        # Set port from .env
+    networks:
+      - mynetwork                                # Connect to custom network
+
+volumes:
+  mysql_data:                                   # Define volume for MySQL data
+
+networks:
+  mynetwork:                                    # Define custom network

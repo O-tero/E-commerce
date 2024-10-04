@@ -52,7 +52,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_session_timeout.middleware.SessionTimeoutMiddleware",
-
 ]
 
 
@@ -90,13 +89,14 @@ AUTH_USER_MODEL = "accounts.Account"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "ecommerce",
-        "USER": "root",
-        "PASSWORD": "",
-        "HOST": "localhost",
-        "PORT": "3306",
+        "NAME": os.environ.get("DB_NAME"),  
+        "USER": os.environ.get("DB_USER"),
+        "PASSWORD": os.environ.get("DB_PASSWORD"),  
+        "HOST": os.environ.get("DB_HOST"), 
+        "PORT": os.environ.get("DB_PORT"), 
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
